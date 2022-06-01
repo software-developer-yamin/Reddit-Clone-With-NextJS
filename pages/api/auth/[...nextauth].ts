@@ -9,4 +9,5 @@ export default NextAuth({
       clientSecret: process.env.REDDIT_CLIENT_SECRET,
     })
   ],
+  secret:"Ca91o88853v6b+vlaL23dKKO0UvZxBa2eww9DTbx2CI="
 })

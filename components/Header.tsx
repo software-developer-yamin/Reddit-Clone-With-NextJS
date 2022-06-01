@@ -16,8 +16,11 @@ import {
   MenuIcon,
   SearchIcon,
 } from '@heroicons/react/solid'
+import { useSession, signIn, signOut } from 'next-auth/react'
 
 const Header = () => {
+  const { data: session } = useSession()
+
   return (
     <header className="flex items-center px-4 py-2 bg-white shadow-sm sticky top-0 z-50 max-[">
       <section className="relative h-10 w-20 flex-shrink-0 cursor-pointer">
@@ -35,7 +38,7 @@ const Header = () => {
       </section>
 
       {/* Search Box */}
-      <form className="flex flex-grow items-center space-x-2 px-3 py-1 rounded-sm border border-gray-200 bg-gay-100">
+      <form className="flex flex-grow items-center space-x-2.5 px-3.5 py-1.5 rounded-md border border-gray-200 bg-gay-100">
         <SearchIcon className="w-6 h-6 text-gray-400" />
         <input
           type="search"
@@ -62,13 +65,43 @@ const Header = () => {
         <MenuIcon className="icon" />
       </section>
 
-      {/* Sign In / Sign Up */}
-      <section className=" hidden lg:flex items-center space-x-2 border rounded-lg border-gray-100 p-2 cursor-pointer">
-        <div className='relative h-5 w-5 flex-shrink-0' >
-          <Image src='https:links.papareact.com/23l' alt="" layout='fill' objectFit="contain" />
-        </div>
-        <p className="text-gray-400" >Sign In</p>
-      </section>
+      {/* Sign In / Sign Out */}
+      {session ? (
+        <section
+          onClick={() => signOut({ callbackUrl: '/' })}
+          className=" hidden lg:flex items-center space-x-2 border rounded-md border-gray-100 p-2 cursor-pointer"
+        >
+          <div className="relative h-5 w-5 flex-shrink-0">
+            <Image
+              src="https:links.papareact.com/23l"
+              alt=""
+              layout="fill"
+              objectFit="contain"
+            />
+          </div>
+          <div className="flex-1 text-xs">
+            <p className="truncate">{session?.user?.name}</p>
+            <p className="text-gray-400">1 Karma</p>
+          </div>
+          <ChevronDownIcon className="h-5 flex-shrink-0 text-gray-400" />
+        </section>
+      ) : (
+        <section
+          onClick={() => signIn('reddit', { callbackUrl: '/' })}
+          className=" hidden lg:flex items-center space-x-2 border rounded-md border-gray-100 p-2 cursor-pointer"
+        >
+          <div className="relative h-5 w-5 flex-shrink-0">
+            <Image
+              src="https:links.papareact.com/23l"
+              alt=""
+              layout="fill"
+              objectFit="contain"
+            />
+          </div>
+
+          <p className="text-gray-400">Sign In</p>
+        </section>
+      )}
     </header>
   )
 }
